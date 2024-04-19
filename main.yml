@@ -1,0 +1,23 @@
+name: Build a Docker image and Push it to ACR
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: azure/docker-login@v1
+        with:
+          login-server: knowledgefactorypvtregistrycm.azurecr.io
+          username: KnowledgefactoryPvtRegistryCM
+          password: Y6+CQHnhNoJdCMO5cihoJ8g1IFWHcjfqoeAe0g8d4t+ACRBbrJwP
+      - run: |
+          docker build . -t knowledgefactorypvtregistrycm.azurecr.io/knowledgefactory:${{ github.sha }}
+          docker push knowledgefactorypvtregistrycm.azurecr.io/knowledgefactory:${{ github.sha }}
