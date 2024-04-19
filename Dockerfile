@@ -1,8 +1,13 @@
-#FROM openjdk:8
-#EXPOSE 8080
-#ADD target/spring-boot-docker.jar spring-boot-docker.jar
-#ENTRYPOINT ["java","-jar","/spring-boot-docker.jar"]
+FROM maven:3.6.3-jdk-11-slim AS build
+WORKDIR usr/src/app
+COPY . ./
+RUN mvn clean package
+#
+# Package stage
+#
+
 FROM openjdk:18-jdk-alpine
-MAINTAINER baeldung.com
-COPY target/spring-boot-docker.jar spring-boot-docker.jar
-ENTRYPOINT ["java","-jar","/spring-boot-docker.jar"]
+ARG JAR_NAME="spring-boot-docker"
+WORKDIR /usr/src/app
+COPY --from=build /usr/src/app/target/${JAR_NAME}.jar ./app.jar
+CMD ["java","-jar", "./app.jar"]
