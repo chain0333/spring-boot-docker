@@ -1,4 +1,4 @@
-FROM maven:3.6.3-jdk-11-slim AS build
+FROM maven:3.8.6-jdk-18-slim AS build
 WORKDIR usr/src/app
 COPY . ./
 RUN mvn clean package
