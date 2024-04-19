@@ -1,4 +1,4 @@
-FROM maven:3.8.6-jdk-18-slim AS build
+FROM maven:3.6.3-jdk-11-slim AS build
 WORKDIR usr/src/app
 COPY . ./
 RUN mvn clean package
@@ -6,7 +6,7 @@ RUN mvn clean package
 # Package stage
 #
 
-FROM openjdk:18-jdk-alpine
+FROM openjdk:11-jre-slim
 ARG JAR_NAME="spring-boot-docker"
 WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/target/${JAR_NAME}.jar ./app.jar
